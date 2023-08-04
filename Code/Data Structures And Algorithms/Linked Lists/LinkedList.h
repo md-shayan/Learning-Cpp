@@ -124,7 +124,6 @@ struct SinglyLinkedList {
 
 template <typename P>
 struct DoublyLinkedList {
-    public:
     DoublePointingNode<P>* head;
     DoublyLinkedList() {
         head = nullptr;
@@ -353,7 +352,6 @@ struct SinglyCircularLinkedList {
 
 template <typename P>
 struct DoublyCircularLinkedList {
-    public:
     DoublePointingNode<P>* head;
 
     DoublyCircularLinkedList() {
