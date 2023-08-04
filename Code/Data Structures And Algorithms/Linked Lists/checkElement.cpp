@@ -6,7 +6,7 @@
 //Time Complexity: O(N)
 //Space Complexity: O(1)
 template <typename T>
-bool isPresent(DoublyLinkedList<T> DLL, T X) {
+bool isPresent(BaseDoublyLinkedList<T> DLL, T X) {
     DoublePointingNode<T>* currentNode = DLL.head;
     while (currentNode->X != X) {
         currentNode = currentNode->next;
