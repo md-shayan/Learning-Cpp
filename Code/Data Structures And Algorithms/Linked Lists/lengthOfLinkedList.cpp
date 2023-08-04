@@ -6,7 +6,7 @@
 //Time Complexity: O(N)
 //Space Complexity: O(1)
 template <typename T>
-int lengthOfLinkedList(SinglyLinkedList<T> SLL) {
+int lengthOfLinkedList(BaseSinglyLinkedList<T> SLL) {
     int size = 0;
     SinglePointingNode<T>* currentNode = SLL.head;
     while (currentNode != nullptr) {
