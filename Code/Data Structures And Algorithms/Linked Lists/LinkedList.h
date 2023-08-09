@@ -1,498 +1,421 @@
 template <typename T>
-struct SinglePointingNode {
+class Node {
+    public:
     T data;
-    SinglePointingNode<T>* next;
-    SinglePointingNode(T data) : data{data} {
-        next = nullptr;
-    }
-};
+    Node<T>* next;
+    Node<T>* prev;
 
-template <typename T>
-struct BaseSinglyLinkedList {
-    SinglePointingNode<T>* head;
-    BaseSinglyLinkedList() = default;
-    virtual void addAtHead(T data) = 0;
-    virtual void addAtTail(T data) = 0;
-    virtual void addAfter(SinglePointingNode<T>* prevNode, T data) = 0;
-    virtual void addBefore(SinglePointingNode<T>* nextNode, T data) = 0;
-    virtual SinglePointingNode<T>* getNode(T data) = 0;
-    virtual void deleteNode(T data) = 0;
-    virtual void print() = 0;
-};
-
-template <typename P>
-struct DoublePointingNode {
-    P data;
-    DoublePointingNode<P>* next;
-    DoublePointingNode<P>* prev;
-    DoublePointingNode(P data) : data{data} {
+    Node(T setData) : data{setData} {
         next = nullptr;
         prev = nullptr;
     }
 };
 
-template <typename P>
-struct BaseDoublyLinkedList {
-    DoublePointingNode<P>* head;
-    BaseDoublyLinkedList() = default;
-    virtual void addAtHead(P data) = 0;
-    virtual void addAtTail(P data) = 0;
-    virtual void addAfter(DoublePointingNode<P>* prevNode, P data) = 0;
-    virtual void addBefore(DoublePointingNode<P>* nextNode, P data) = 0;
-    virtual DoublePointingNode<P>* getNode(P data) = 0;
-    virtual void deleteNode(P data) = 0;
-    virtual void print() = 0;
-};
-
 template <typename T>
-struct SinglyLinkedList : BaseSinglyLinkedList<T> {
-    SinglePointingNode<T>* head;
-    SinglyLinkedList() {
-        this->head = nullptr;
-    }
+class LinkedList {
 
-    //Time Complexity: O(1)
-    void addAtHead(T data) override {
-        SinglePointingNode<T>* newNode = new SinglePointingNode<T>(data);
-        if (head == nullptr) {
-            head = newNode;
-            return;
-        }
-        newNode->next = this->head;
-        this->head = newNode;
-    }
 
-    //Time Complexity: O(N)
-    void addAtTail(T data) override {
-        SinglePointingNode<T>* newNode = new SinglePointingNode<T>(data);
-        newNode->next = nullptr;
-        if (head == nullptr) {
-            head = newNode;
-            return;
-        }
-        SinglePointingNode<T>* tailNode = head;
-        while (tailNode->next != nullptr) {
-            tailNode = tailNode->next;
-        }
-        tailNode->next = newNode;
-    }
+    public:
+    Node<T>* head;
 
-    //Time Compleixty: O(N)
-    void addAfter(SinglePointingNode<T>* prevNode, T data) override {
-        SinglePointingNode<T>* newNode = new SinglePointingNode<T>(data);
-        SinglePointingNode<T>* nextNode = head;
-        while (prevNode->next != nextNode) {
-            nextNode = nextNode->next;
-        }
-        newNode->next = nextNode;
-        prevNode->next = newNode;
-    }
+    // Unlike isCircular, changing this would impact how the 'print()' method prints this linked list
+    // Instead of ' -> ', isDoubly would make it ' <-> ' to show a two way connection between Nodes
+    bool isDoubly;
 
-    //Time Compleixty: O(N)
-    void addBefore(SinglePointingNode<T>* nextNode, T data) override {
-        SinglePointingNode<T>* newNode = new SinglePointingNode<T>(data);
-        if (nextNode == head) {
-            newNode->next = head;
-            head = newNode;
-            return;
-        }
-        SinglePointingNode<T>* prevNode = head;
-        while (prevNode->next != nextNode) {
-            prevNode = prevNode->next;
-        }
-        newNode->next = nextNode;
-        prevNode->next = newNode;
-    }
+    // Changing this would not make a circular list into non-circular, or vice versa
+    // Hence it is declared const for safety and will only be used by the class methods
+    const bool isCircular;
 
-    SinglePointingNode<T>* getNode(T data) override {
-        SinglePointingNode<T>* currentNode = head;
-        while (currentNode->data != data && currentNode != nullptr) {
-            currentNode = currentNode->next;
-        }
-        return currentNode;
-    }
-
-    //Time Complexity: O(N)
-    void deleteNode(T data) override {
-        if (head == nullptr) {
-            return;
-        }
-        SinglePointingNode<T>* NodeToDelete = getNode(data);
-        if (NodeToDelete == head) {
-            SinglePointingNode<T>* tempNode = head->next;
-            delete NodeToDelete;
-            head = tempNode;
-            return;
-        }
-        SinglePointingNode<T>* prevNode = head;
-        while (prevNode->next != NodeToDelete) {
-            prevNode = prevNode->next;
-        }
-        prevNode->next = NodeToDelete->next;
-        delete NodeToDelete;
-    }
-
-    void print() override {
-        SinglePointingNode<T>* currentNode = head;
-        if (head == nullptr) {
-            std::cout<<"Empty List"<<std::endl;
-            return;
-        }
-        while (currentNode != nullptr) {
-            std::cout<<currentNode->data<<" -> ";
-            currentNode = currentNode->next;
-        }
-        std::cout<<"NULL"<<std::endl;
-    }
-};
-
-template <typename P>
-struct DoublyLinkedList : BaseDoublyLinkedList<P> {
-    DoublePointingNode<P>* head;
-    DoublyLinkedList() {
+    LinkedList(bool setDoubly=false, bool setCircular=false) : isCircular{setCircular} {
         head = nullptr;
+        isDoubly = setDoubly;
     }
 
-    //Time Complexity: O(1)
-    void addAtHead(P data) override {
-        DoublePointingNode<P>* newNode = new DoublePointingNode<P>(data);
+    bool isEmpty() {
+        return (head==nullptr);
+    }
+
+
+    void addAtHead(T data) {
+        Node<T>* newNode = new Node<T>(data);
+        if (isEmpty()) {
+            head=newNode;
+
+            // Self-explanatory corner case
+            if (isCircular) {head->next = head;}
+            // For non-circular linked lists,
+            // The prev of head Node will always be NULL 
+            return;
+        }
         newNode->next = head;
-        if (head != nullptr) {
-            head->prev = newNode;
-        }
-        head = newNode;
-    }
+        if (isDoubly) {head->prev = newNode;}
 
-    //Time Complexity: O(N)
-    void addAtTail(P data) override {
-        DoublePointingNode<P>* newNode = new DoublePointingNode<P>(data);
-        newNode->next = nullptr;
-        if (head == nullptr) {
-            head = newNode;
-            return;
-        }
-        DoublePointingNode<P>* tailNode = head;
-        while (tailNode->next != nullptr) {
-            tailNode = tailNode->next;
-        }
-        tailNode->next = newNode;
-        newNode->prev = tailNode;
-    }
-
-    //Time Complexity: O(1)
-    void addAfter(DoublePointingNode<P>* prevNode, P data) override {
-        DoublePointingNode<P>* newNode = new DoublePointingNode<P>(data);
-        newNode->next = prevNode->next;
-        prevNode->next = newNode;
-        newNode->prev = prevNode;
-        if (newNode->next != nullptr) {
-            newNode->next->prev = newNode;
-        }
-    }
-
-    //Time Complexity: O(1)
-    void addBefore(DoublePointingNode<P>* nextNode, P data) override {
-        DoublePointingNode<P>* newNode = new DoublePointingNode<P>(data);
-        newNode->prev = nextNode->prev;
-        nextNode->prev = newNode;
-        newNode->next = nextNode;
-        if (newNode->prev != nullptr) {
-            newNode->prev->next = newNode;
-        }
-        else {
-            head = newNode;
-        }
-    }
-
-    //Time Complexity: O(N)
-    void deleteNode(P data) override {
-        if (head == nullptr) {
-            return;
-        }
-        DoublePointingNode<P>* NodeToDelete = getNode(data);
-        if (NodeToDelete == head) {
-            DoublePointingNode<P>* tempNode = head->next;
-            delete NodeToDelete;
-            head = tempNode;
-            return;
-        }
-        DoublePointingNode<P>* prevNode = NodeToDelete->prev;
-        prevNode->next = NodeToDelete->next;
-        delete NodeToDelete;
-        return;
-    }
-
-    //Time Complexity: O(N)
-    DoublePointingNode<P>* getNode(P data) override {
-        DoublePointingNode<P>* currentNode = head;
-        while (currentNode->data != data) {
-            currentNode = currentNode->next;
-        }
-        return currentNode;
-    }
-
-    void print() override {
-        DoublePointingNode<P>* currentNode = head;
-        if (head == nullptr) {
-            std::cout<<"Empty List"<<std::endl;
-            return;
-        }
-        while (currentNode != nullptr) {
-            std::cout<<currentNode->data<<" <-> ";
-            currentNode = currentNode->next;
-        }
-        std::cout<<"NULL"<<std::endl;
-    }
-
-};
-
-template <typename T>
-struct SinglyCircularLinkedList : BaseSinglyLinkedList<T> {
-    SinglePointingNode<T>* head;
-    SinglyCircularLinkedList() {
-        head = nullptr;
-    }
-
-    //Time Complexity: O(N)
-    void addAtHead(T data) override {
-        SinglePointingNode<T>* newNode = new SinglePointingNode<T>(data);
-        if (head == nullptr) {
-            head = newNode;
-            newNode->next = head;
-            return;
-        }
-        SinglePointingNode<T>* lastNode = head;
-        while (lastNode->next != head) {
-            lastNode = lastNode->next;
-        }
-        lastNode->next = newNode;
-        newNode->next = head;
-        head = newNode;
-    }
-
-    //Time Complexity: O(N)
-    void addAtTail(T data) override {
-        SinglePointingNode<T>* newNode = new SinglePointingNode<T>(data);
-        if (head == nullptr) {
-            head = newNode;
-            newNode->next = head;
-            return;
-        }
-        SinglePointingNode<T>* lastNode = head;
-        while (lastNode->next != head) {
-            lastNode = lastNode->next;
-        }
-        lastNode->next = newNode;
-        newNode->next = head;
-    }
-
-    //Time Complexity: O(1)
-    void addAfter(SinglePointingNode<T>* prevNode, T data) override {
-        SinglePointingNode<T>* newNode = new SinglePointingNode<T>(data);
-        if (head == nullptr) {
-            head = newNode;
-            head->next = newNode;
-            return;
-        }
-        SinglePointingNode<T>* nextNode = prevNode->next;
-        prevNode->next = newNode;
-        newNode->next = nextNode;
-    }
-
-    //Time Complexity: O(N)
-    void addBefore(SinglePointingNode<T>* nextNode, T data) override {
-        SinglePointingNode<T>* newNode = new SinglePointingNode<T>(data);
-        if (head == nullptr) {
-            head = newNode;
-            head->next = newNode;
-            return;
-        }
-        SinglePointingNode<T>* prevNode = head;
-        while (prevNode->next != nextNode) {
-            prevNode = prevNode->next;
-        }
-        prevNode->next = newNode;
-        newNode->next = nextNode;
-    }
-
-    //Time Complexity: O(N)
-    SinglePointingNode<T>* getNode(T data) override {
-        SinglePointingNode<T>* currentNode = head;
-        while (currentNode->data != data) {
-            currentNode = currentNode->next;
-            if (currentNode == head) {
-                return nullptr;
-            }
-        }
-        return currentNode;
-    }
-
-    //Time Complexity: O(N)
-    void deleteNode(T data) override {
-        if (head == nullptr) {
-            return;
-        }
-        SinglePointingNode<T>* NodeToDelete = getNode(data);
-        if (NodeToDelete == nullptr) {
-            std::cout<<"Given SinglePointingNode is not Found"<<std::endl;
-        }
-        if (NodeToDelete == head) {
-            SinglePointingNode<T>* lastNode = head;
+        // An important condition for circular linked lists,
+        // Making the last Node of the linked list point next to newNode
+        if (isCircular) {
+            Node<T>* lastNode = head;
             while (lastNode->next != head) {
                 lastNode = lastNode->next;
             }
-            lastNode->next = NodeToDelete->next;
-            head = NodeToDelete->next;
-            delete NodeToDelete;
+            lastNode->next = newNode;
+            if (isDoubly) {newNode->prev = lastNode;}
+        }
+        head = newNode;
+    }
+
+    void addAtHead(Node<T>* newNode) {
+        if (isEmpty()) {
+            head=newNode;
+
+            // Self-explanatory corner case
+            if (isCircular) {head->next = head;}
+            // For non-circular linked lists,
+            // The prev of head Node will always be NULL 
             return;
         }
-        SinglePointingNode<T>* prevNode = head;
+        newNode->next = head;
+        if (isDoubly) {head->prev = newNode;}
+
+        // An important condition for circular linked lists,
+        // Making the last Node of the linked list point next to newNode
+        if (isCircular) {
+            Node<T>* lastNode = head;
+            while (lastNode->next != head) {lastNode = lastNode->next;}
+            lastNode->next = newNode;
+            if (isDoubly) {newNode->prev = lastNode;}
+        }
+        head = newNode;
+    }
+
+    void addAtTail(T data) {
+        Node<T>* newNode = new Node<T>(data);
+        if (isEmpty()) {
+            head = newNode;
+
+            // Self-explanatory corner case
+            if (isCircular) {head->next = head;}
+            // For non-circular linked lists,
+            // The prev of head Node will always be NULL 
+            return;
+        }
+        Node<T>* lastNode = head;
+        if (isCircular) {
+            while (lastNode->next != head) {
+                lastNode = lastNode->next;
+            }
+
+            // The terminating conditon of circular linked lists
+            newNode->next = head;
+        }
+        else {
+            while (lastNode->next != nullptr) {
+                lastNode = lastNode->next;
+            }
+        }
+        lastNode->next = newNode;
+        if (isDoubly) {newNode->prev = lastNode;}
+    }
+
+    void addAtTail(Node<T>* newNode) {
+        if (isEmpty()) {
+            head = newNode;
+
+            // Self-explanatory corner case
+            if (isCircular) {head->next = head;}
+            // For non-circular linked lists,
+            // The prev of head Node will always be NULL 
+            return;
+        }
+        Node<T>* lastNode = head;
+        if (isCircular) {
+            while (lastNode->next != head) {
+                lastNode = lastNode->next;
+            }
+
+            // The terminating conditon of circular linked lists
+            newNode->next = head;
+        }
+        else {
+            while (lastNode->next != nullptr) {
+                lastNode = lastNode->next;
+            }
+        }
+        lastNode->next = newNode;
+        if (isDoubly) {newNode->prev = lastNode;}
+    }
+
+    void addAfter(Node<T>* prevNode, T data) {
+        if (isEmpty() || prevNode == nullptr) {
+            std::cout<<"Node is a nullptr and/or List is empty"<<std::endl;
+            return;
+        }
+
+        Node<T>* newNode = new Node<T>(data);
+        // If prev Node is the last Node of:
+        // CASE 1: A circular linked list
+        if (isCircular && prevNode->next == head) {
+            newNode->next = prevNode->next;
+            prevNode->next = newNode;
+            if (isDoubly) {newNode->prev = prevNode;}
+            return;
+        }
+
+        // CASE 2: A non-circular linked list
+        if (!isCircular && prevNode->next == nullptr) {
+            prevNode->next = newNode;
+            if (isDoubly) {newNode->prev = prevNode;}
+            return;
+        }
+        newNode->next = prevNode->next;
+        prevNode->next = newNode;
+    }
+
+    void addAfter(Node<T>* prevNode, Node<T>* newNode) {
+        if (isEmpty() || prevNode == nullptr || newNode == nullptr) {
+            std::cout<<"Node is a nullptr and/or List is empty"<<std::endl;
+            return;
+        }
+
+        // If prev Node is the last Node of:
+        // CASE 1: A circular linked list
+        if (isCircular && prevNode->next == head) {
+            newNode->next = prevNode->next;
+            prevNode->next = newNode;
+            if (isDoubly) {newNode->prev = prevNode;}
+            return;
+        }
+
+        // CASE 2: A non-circular linked list
+        if (!isCircular && prevNode->next == nullptr) {
+            prevNode->next = newNode;
+            if (isDoubly) {newNode->prev = prevNode;}
+            return;
+        }
+        newNode->next = prevNode->next;
+        prevNode->next = newNode;
+    }
+
+    void addBefore(Node<T>* nextNode, T data) {
+        if (isEmpty() || nextNode == nullptr) {
+            std::cout<<"Node is a nullptr and/or List is empty"<<std::endl;
+            return;
+        }
+
+        Node<T>* newNode = new Node<T>(data);
+        if (nextNode == head) {
+            newNode->next = nextNode;
+
+            // If the linked list is circular, then point the last Node next to new Node
+            if (isCircular) {
+                Node<T>* lastNode = head;
+                while (lastNode->next != head) {
+                    lastNode = lastNode->next;
+                }
+                lastNode->next = newNode;
+            }
+            if (isDoubly) {nextNode->prev = newNode;}
+            head = newNode;
+            return;
+        }
+        Node<T>* prevNode;
+        if (isDoubly) {prevNode = nextNode->prev;}
+        else {
+            prevNode = head;
+            while (prevNode->next != nextNode) {
+                prevNode = prevNode->next;
+            }
+        }
+        prevNode->next = newNode;
+        newNode->next = nextNode;
+        if (isDoubly) {
+            nextNode->prev = newNode;
+            newNode->prev = prevNode;
+        }
+    }
+
+    void addBefore(Node<T>* nextNode, Node<T>* newNode) {
+        if (isEmpty() || nextNode == nullptr || newNode == nullptr) {
+            std::cout<<"Node is a nullptr and/or List is empty"<<std::endl;
+            return;
+        }
+
+        if (nextNode == head) {
+            newNode->next = nextNode;
+
+            // If the linked list is circular, then point the last Node next to new Node
+            if (isCircular) {
+                Node<T>* lastNode = head;
+                while (lastNode->next != head) {
+                    lastNode = lastNode->next;
+                }
+                lastNode->next = newNode;
+            }
+            if (isDoubly) {nextNode->prev = newNode;}
+            head = newNode;
+            return;
+        }
+        Node<T>* prevNode;
+        if (isDoubly) {prevNode = nextNode->prev;}
+        else {
+            prevNode = head;
+            while (prevNode->next != nextNode) {
+                prevNode = prevNode->next;
+            }
+        }
+        prevNode->next = newNode;
+        newNode->next = nextNode;
+        if (isDoubly) {
+            nextNode->prev = newNode;
+            newNode->prev = prevNode;
+        }
+    }
+
+    // Deletes the first Node containing 'data'
+    void deleteNode(T data) {
+        if (isEmpty()) {
+            std::cout<<"Linked List is empty"<<std::endl;
+            return;
+        }
+
+        Node<T>* NodeToDelete = getNode(data);
+        if (NodeToDelete == nullptr) {
+            std::cout<<"Node with 'data' not found"<<std::endl;
+            return;
+        }
+
+        // Point the next of prev Node to next of NodeToDelete
+        Node<T>* prevNode = head;
         while (prevNode->next != NodeToDelete) {
             prevNode = prevNode->next;
         }
         prevNode->next = NodeToDelete->next;
+        if (NodeToDelete == head) {
+            head = NodeToDelete->next;
+            if (isDoubly) {head->prev = nullptr;}
+        }
+        if (isDoubly) {NodeToDelete->next->prev = prevNode;}
+        NodeToDelete = nullptr;
         delete NodeToDelete;
     }
 
-    void print() override {
-        if (head == nullptr) {
-            std::cout<<"Empty List"<<std::endl;
+    // Deletes the first Node containing 'data'
+    void deleteNode(Node<T>* NodeToDelete) {
+        if (isEmpty()) {
+            std::cout<<"Linked List is empty"<<std::endl;
             return;
         }
-        if (head->next == head) {
-            std::cout<<head->data<<" -> "<<head->data<<std::endl;
-            return;
-        }
-        std::cout<<head->data<<" -> ";
-        SinglePointingNode<T>* currentNode = head->next;
-        while (currentNode != head) {
-            std::cout<<currentNode->data<<" -> ";
-            currentNode = currentNode->next;
-        }
-        std::cout<<head->data<<std::endl;
-    }
-};
 
-template <typename P>
-struct DoublyCircularLinkedList : BaseDoublyLinkedList<P> {
-    DoublePointingNode<P>* head;
-
-    DoublyCircularLinkedList() {
-        head = nullptr;
-    }
-
-    //Time Complexity: O(1)
-    void addAtHead(P data) override {
-        DoublePointingNode<P>* newNode = new DoublePointingNode<P>(data);
-        if (head == nullptr) {
-            newNode->next = newNode;
-            newNode->prev = newNode;
-            head = newNode;
+        if (NodeToDelete == nullptr) {
+            std::cout<<"Node with 'data' not found"<<std::endl;
             return;
         }
-        DoublePointingNode<P>* lastNode = head->prev;
-        lastNode->next = newNode;
-        newNode->next = head;
-        head->prev = newNode;
-        newNode->prev = lastNode;
-        head = newNode;
-    }
 
-    //Time Complexity: O(1)
-    void addAtTail(P data) override {
-        DoublePointingNode<P>* newNode = new DoublePointingNode<P>(data);
-        if (head == nullptr) {
-            newNode->prev = newNode;
-            newNode->next = newNode;
-            head = newNode;
+        // The above implementation of LinkedList<T>::deleteNode(T) does not require this
+        // as it iterates over the list using LinkedList<T>::getNode(T) function which
+        // does the same job.
+        if (!exists(NodeToDelete)) {
             return;
         }
-        DoublePointingNode<P>* lastNode = head->prev;
-        lastNode->next = newNode;
-        newNode->next = head;
-        newNode->prev = lastNode;
-        head->prev = newNode;
-        newNode->prev = lastNode;
-    }
 
-    //Time Complexity: O(1)
-    void addAfter(DoublePointingNode<P>* prevNode, P data) override {
-        DoublePointingNode<P>* newNode = new DoublePointingNode<P>(data);
-        DoublePointingNode<P>* nextNode = prevNode->next;
-        if (nextNode == head) {
-            prevNode->next = newNode;
-            newNode->prev = prevNode;
-            newNode->next = head;
-            head->prev = newNode;
-            head = newNode;
-            return;
-        }
-        prevNode->next = newNode;
-        newNode->prev = prevNode;
-        newNode->next = nextNode;
-        nextNode->prev = newNode;
-    }
-
-    //Time Complexity: O(1)
-    void addBefore(DoublePointingNode<P>* nextNode, P data) override {
-        if (head == nullptr) {
-            std::cout<<"List is empty"<<std::endl;
-            return;
-        }
-        DoublePointingNode<P>* newNode = new DoublePointingNode<P>(data);
-        DoublePointingNode<P>* prevNode = nextNode->prev;
-        if (nextNode == head) {
-            prevNode->next = newNode;
-            newNode->prev = prevNode;
-            newNode->next = head;
-            head->prev = newNode;
-            head = newNode;
-            return;
-        }
-        prevNode->next = newNode;
-        newNode->prev = prevNode;
-        newNode->next = nextNode;
-        nextNode->prev = newNode;
-    }
-
-    //Time Compleixty: O(1)
-    void deleteNode(P data) override {
-        DoublePointingNode<P>* NodeToDelete = getNode(data);
-        DoublePointingNode<P>* prevNode = NodeToDelete->prev;
-        if (NodeToDelete == head) {
-            prevNode->next = head->next;
-            head = head->next;
-            delete NodeToDelete;
-            return;
+        // Point the next of prev Node to next of NodeToDelete
+        Node<T>* prevNode = head;
+        while (prevNode->next != NodeToDelete) {
+            prevNode = prevNode->next;
         }
         prevNode->next = NodeToDelete->next;
-        NodeToDelete->next->prev = prevNode;
+        if (NodeToDelete == head) {
+            head = NodeToDelete->next;
+            if (isDoubly) {head->prev = nullptr;}
+        }
+        if (isDoubly) {NodeToDelete->next->prev = prevNode;}
+        NodeToDelete = nullptr;
         delete NodeToDelete;
-        return;
     }
 
-    DoublePointingNode<P>* getNode(P data) override {
-        if (head->data == data) {
-            return head;
+    // Returns the first Node containing 'data',
+    // If none then returns NULL
+    Node<T>* getNode(T data) {
+        if (isEmpty()) {return nullptr;}
+
+        Node<T>* NodeToGet = head;
+        if (isCircular) {
+            while (NodeToGet->data != data) {
+
+                // Indicates the end of a circular linked list, hence it terminates
+                if (NodeToGet->next == head) {return nullptr;}
+                NodeToGet = NodeToGet->next;
+            }
+            return NodeToGet;
         }
-        DoublePointingNode<P>* currentNode = head->next;
-        while(currentNode->data != data && currentNode != head) {
+        while (NodeToGet->data != data) {
+
+            // Indicates the end of a non-circular linked list, hence it terminates
+            if (NodeToGet->next == nullptr) {return nullptr;}
+            NodeToGet = NodeToGet->next;
+        }
+        return NodeToGet;
+    }
+
+    //return true of NodeToSearch exists in the Linked List
+    bool exists(Node<T>* NodeToSearch) {
+        if (head == nullptr) {
+            std::cout<<"Linked List is Empty"<<std::endl;
+            return false;
+        }
+
+        if (NodeToSearch == nullptr) {
+            std::cout<<"Cannot Search NULL in Linked List"<<std::endl;
+            return false;
+        }
+
+        Node<T>* currentNode = head;
+        if (isCircular) {
+            while (currentNode != NodeToSearch) {
+                if (currentNode->next == head) {return false;}
+                currentNode = currentNode->next;
+            }
+            return true;
+        }
+        while (currentNode != NodeToSearch) {
+            if (currentNode->next == nullptr) {return false;}
             currentNode = currentNode->next;
         }
-        return currentNode;
+        return true;
     }
 
-    void print() override {
-        if (head == nullptr) {
+    void print() {
+        if (isEmpty()) {
             std::cout<<"Empty List"<<std::endl;
             return;
         }
-        std::cout<<head->data<<" <-> ";
-        DoublePointingNode<P>* currentNode = head->next;
-        while (currentNode != head) {
-            std::cout<<currentNode->data<<" <-> ";
-            currentNode = currentNode->next;
+        Node<T>* currentNode;
+
+        // For circular linked lists, the terminating condition is that last Node points next to head Node
+        if (isCircular) {
+            std::cout<<head->data;
+            if (head->next == head) {
+                std::cout<<head->data<<std::endl;
+                return;
+            }
+            currentNode = head->next;
+            while (currentNode != head) {
+                if (isDoubly) {std::cout<<" <-> "<<currentNode->data;}
+                else {std::cout<<" -> "<<currentNode->data;}
+                    currentNode = currentNode->next;
+                }
+            if (isDoubly) {std::cout<<" <-> "<<head->data<<std::endl;}
+            else {std::cout<<" -> "<<head->data<<std::endl;}
         }
-        std::cout<<head->data<<std::endl;
+
+        // For non-circular linked lists, the condition is that last Node points next to NULL
+        else {
+            currentNode = head;
+            while (currentNode->next != nullptr) {
+                if (isDoubly) {std::cout<<currentNode->data<<" <-> ";}
+                else {std::cout<<currentNode->data<<" -> ";}
+                currentNode = currentNode->next;
+            }
+            std::cout<<currentNode->data<<std::endl;
+        }
     }
 };

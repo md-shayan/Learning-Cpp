@@ -6,23 +6,19 @@
 //Time Complexity: O(N)
 //Space Complexity: O(1)
 template <typename T>
-bool isPresent(BaseDoublyLinkedList<T> DLL, T X) {
-    DoublePointingNode<T>* currentNode = DLL.head;
-    while (currentNode->X != X) {
-        currentNode = currentNode->next;
-        if (currentNode == nullptr) {return 0;}
-    }
+bool isPresent(LinkedList<T> ll, T data) {
+    if (ll.getNode(data) == nullptr) {return 0;}
     return 1;
 }
 
-//Recursive
+//Recursive (Only works for non-circular Linked Lists)
 //Time Complexity: O(N)
 //Space Complexity: O(1)
 template <typename T>
-bool isPresent(DoublePointingNode<T>* currentNode, T X) {
+bool isPresent(Node<T>* currentNode, T data) {
     if (currentNode != nullptr) {
-        if (currentNode->data == X) {return 1;}
-        return isPresent(currentNode->next, X);
+        if (currentNode->data == data) {return 1;}
+        return isPresent(currentNode->next, data);
     }
     else {
         return 0;
@@ -30,12 +26,12 @@ bool isPresent(DoublePointingNode<T>* currentNode, T X) {
 }
 
 int main() {
-    DoublyLinkedList<int> DLL;
-    DLL.addAtHead(4);
-    DLL.addAtHead(3);
-    DLL.addAtHead(2);
-    DLL.addAtHead(1);
-    DLL.print();
-    std::cout<<isPresent(DLL.head, 1)<<std::endl;
+    LinkedList<int> ll(1, 0);
+    ll.addAtHead(4);
+    ll.addAtHead(3);
+    ll.addAtHead(2);
+    ll.addAtHead(1);
+    ll.print();
+    std::cout<<isPresent(ll.head, 5)<<std::endl;
     return 0;
 }

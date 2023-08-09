@@ -1,47 +1,48 @@
-//Given Circular linked list exchange the first and the last node. The task should be done with only one extra node.
+//Given linked list exchange the first and the last node. The task should be done with only one extra node.
 #include <iostream>
 #include "LinkedList.h"
 
 //Time Compleixty: O(N)
 //Space Compleixty: O(1)
 template <typename T>
-void exchangeFirstLastNodes(SinglyCircularLinkedList<T> SCLL) {
-    SinglePointingNode<T>* lastNode = SCLL.head;
-    while (lastNode->next != SCLL.head) {
-        lastNode = lastNode->next;
+void exchangeFirstLastNodes(LinkedList<T> LL) {
+    if (LL.isCircular) {
+        Node<T>* lastNode = LL.head;
+        while (lastNode->next != LL.head) {
+            lastNode = lastNode->next;
+        }
+        T temp = LL.head->data;
+        LL.head->data = lastNode->data;
+        lastNode->data = temp;
     }
-    T temp = SCLL.head->data;
-    SCLL.head->data = lastNode->data;
-    lastNode->data = temp;
-}
-
-//Time Compleixty: O(1)
-//Space Compleixty: O(1)
-template <typename T>
-void exchangeFirstLastNodes(DoublyCircularLinkedList<T> DCLL) {
-    DoublePointingNode<T>* lastNode = DCLL.head->prev;
-    T temp = DCLL.head->data;
-    DCLL.head->data = lastNode->data;
-    lastNode->data = temp;
+    else {
+        Node<T>* lastNode = LL.head;
+        while (lastNode->next != nullptr) {
+            lastNode = lastNode->next;
+        }
+        T temp = LL.head->data;
+        LL.head->data = lastNode->data;
+        lastNode->data = temp;
+    }
 }
 
 int main() {
-    SinglyCircularLinkedList<int> SCLL;
-    SCLL.addAtHead(4);
-    SCLL.addAtHead(3);
-    SCLL.addAtHead(2);
-    SCLL.addAtHead(1);
-    SCLL.print();
-    exchangeFirstLastNodes(SCLL);
-    SCLL.print();
+    LinkedList<int> LL;
+    LL.addAtHead(4);
+    LL.addAtHead(3);
+    LL.addAtHead(2);
+    LL.addAtHead(1);
+    LL.print();
+    exchangeFirstLastNodes(LL);
+    LL.print();
 
-    DoublyCircularLinkedList<int> DCLL;
-    DCLL.addAtHead(4);
-    DCLL.addAtHead(3);
-    DCLL.addAtHead(2);
-    DCLL.addAtHead(1);
-    DCLL.print();
-    exchangeFirstLastNodes(DCLL);
-    DCLL.print();
+    LinkedList<int> LL2(0, 1);
+    LL2.addAtHead(4);
+    LL2.addAtHead(3);
+    LL2.addAtHead(2);
+    LL2.addAtHead(1);
+    LL2.print();
+    exchangeFirstLastNodes(LL2);
+    LL2.print();
     return 0;
 }

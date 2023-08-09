@@ -7,59 +7,25 @@
 //Space Complexity: O(1)
 
 template<typename T>
-T getNthNodeFromEnd(SinglyLinkedList<T> SLL, int N) {
+T getNthNodeFromEnd(LinkedList<T> LL, int N) {
     int length = 0;
-    SinglePointingNode<T>* currentNode = SLL.head;
-    while (currentNode != nullptr) {
+    Node<T>* currentNode = LL.head;
+    if (LL.isCircular) {
         length++;
-        currentNode = currentNode->next;
+        while (currentNode->next != LL.head) {
+            length++;
+            currentNode = currentNode->next;
+        }
     }
-    currentNode = SLL.head;
-    for (int i=0; i<N-length; i++) {
-        currentNode = currentNode->next;
-    }
-    return currentNode->data;
-}
 
-template<typename T>
-T getNthNodeFromEnd(SinglyCircularLinkedList<T> SCLL, int N) {
-    int length = 0;
-    SinglePointingNode<T>* currentNode = SCLL.head;
-    while (currentNode != nullptr) {
-        length++;
-        currentNode = currentNode->next;
+    else {
+        while (currentNode != nullptr) {
+            length++;
+            currentNode = currentNode->next;
+        }
     }
-    currentNode = SCLL.head;
-    for (int i=0; i<N-length; i++) {
-        currentNode = currentNode->next;
-    }
-    return currentNode->data;
-}
 
-template<typename T>
-T getNthNodeFromEnd(DoublyLinkedList<T> DLL, int N) {
-    int length = 0;
-    DoublePointingNode<T>* currentNode = DLL.head;
-    while (currentNode != nullptr) {
-        length++;
-        currentNode = currentNode->next;
-    }
-    currentNode = DLL.head;
-    for (int i=0; i<N-length; i++) {
-        currentNode = currentNode->next;
-    }
-    return currentNode->data;
-}
-
-template<typename T>
-T getNthNodeFromEnd(DoublyCircularLinkedList<T> DCLL, int N) {
-    int length = 0;
-    DoublePointingNode<T>* currentNode = DCLL.head;
-    while (currentNode != nullptr) {
-        length++;
-        currentNode = currentNode->next;
-    }
-    currentNode = DCLL.head;
+    currentNode = LL.head;
     for (int i=0; i<N-length; i++) {
         currentNode = currentNode->next;
     }
@@ -67,12 +33,20 @@ T getNthNodeFromEnd(DoublyCircularLinkedList<T> DCLL, int N) {
 }
 
 int main() {
-    DoublyLinkedList<int> SLL;
-    SLL.addAtHead(20);
-    SLL.addAtHead(4);
-    SLL.addAtHead(15);
-    SLL.addAtHead(35);
-    SLL.print();
-    std::cout<<getNthNodeFromEnd(SLL, 4);
+    LinkedList<int> LL;
+    LL.addAtHead(20);
+    LL.addAtHead(4);
+    LL.addAtHead(15);
+    LL.addAtHead(35);
+    LL.print();
+    std::cout<<getNthNodeFromEnd(LL, 4)<<std::endl;
+
+    LinkedList<int> LL2(0, 1);
+    LL2.addAtHead(20);
+    LL2.addAtHead(4);
+    LL2.addAtHead(15);
+    LL2.addAtHead(35);
+    LL2.print();
+    std::cout<<getNthNodeFromEnd(LL2, 4)<<std::endl;
     return 0;
 }

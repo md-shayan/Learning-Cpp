@@ -3,44 +3,42 @@
 #include "LinkedList.h"
 
 template <typename T>
-int countNodes(SinglyCircularLinkedList<T> SCLL) {
-    int count = 0;
-    if (SCLL.head != nullptr) {count++;}
-    SinglePointingNode<T>* currentNode = SCLL.head->next;
-    while (currentNode != SCLL.head) {
-        count++;
-        currentNode = currentNode->next;
+int countNodes(LinkedList<T> ll) {
+    if (ll.isCircular) {
+        int count = 0;
+        Node<T>* currentNode = ll.head;
+        while (currentNode->next != ll.head) {
+            count++;
+            currentNode = currentNode->next;
+        }
+        return count+1;
     }
-    return count;
-}
-
-template <typename T>
-int countNodes(DoublyCircularLinkedList<T> DCLL) {
-    int count = 0;
-    if (DCLL.head != nullptr) {count++;}
-    DoublePointingNode<T>* currentNode = DCLL.head->next;
-    while (currentNode != DCLL.head) {
-        count++;
-        currentNode = currentNode->next;
+    else {
+        int count = 0;
+        Node<T>* currentNode = ll.head;
+        while (currentNode != nullptr) {
+            count++;
+            currentNode = currentNode->next;
+        }
+        return count;
     }
-    return count;
 }
 
 int main() {
-    SinglyCircularLinkedList<int> SCLL;
-    SCLL.addAtHead(4);
-    SCLL.addAtHead(3);
-    SCLL.addAtHead(2);
-    SCLL.addAtHead(1);
-    SCLL.print();
-    std::cout<<countNodes(SCLL)<<std::endl;
+    LinkedList<int> ll;
+    ll.addAtHead(4);
+    ll.addAtHead(3);
+    ll.addAtHead(2);
+    ll.addAtHead(1);
+    ll.print();
+    std::cout<<countNodes(ll)<<std::endl;
 
-    DoublyCircularLinkedList<int> DCLL;
-    DCLL.addAtHead(4);
-    DCLL.addAtHead(3);
-    DCLL.addAtHead(2);
-    DCLL.addAtHead(1);
-    DCLL.print();
-    std::cout<<countNodes(DCLL)<<std::endl;
+    LinkedList<int> ll2(0, 1);
+    ll2.addAtHead(4);
+    ll2.addAtHead(3);
+    ll2.addAtHead(2);
+    ll2.addAtHead(1);
+    ll2.print();
+    std::cout<<countNodes(ll2)<<std::endl;
     return 0;
 }

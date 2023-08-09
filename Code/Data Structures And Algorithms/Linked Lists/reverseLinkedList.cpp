@@ -8,51 +8,55 @@
 //Space Complexity: O(1)
 
 template <typename T>
-SinglePointingNode<T>* reverseLinkedList(SinglePointingNode<T>* head) {
-    SinglePointingNode<T>* currentNode = head;
-    SinglePointingNode<T>* nextNode = nullptr;
-    SinglePointingNode<T>* prevNode = nullptr;
-    while (currentNode != nullptr) {
-        nextNode = currentNode->next;
-        currentNode->next = prevNode;
-        prevNode = currentNode;
-        currentNode = nextNode;
-    } 
-    return prevNode;
-}
+Node<T>* reverseLinkedList(Node<T>* head, bool isCircular) {
+    Node<T>* currentNode = head;
+    Node<T>* nextNode = nullptr;
+    Node<T>* prevNode = nullptr;
 
-template <typename T>
-DoublePointingNode<T>* reverseLinkedList(DoublePointingNode<T>* head) {
-    DoublePointingNode<T>* currentNode = head;
-    DoublePointingNode<T>* nextNode = nullptr;
-    DoublePointingNode<T>* prevNode = nullptr;
-    while (currentNode != nullptr) {
+    if (isCircular) {
+        while (currentNode->next != head) {
+            nextNode = currentNode->next;
+            currentNode->next = prevNode;
+            prevNode = currentNode;
+            currentNode = nextNode;
+        }
         nextNode = currentNode->next;
         currentNode->next = prevNode;
         prevNode = currentNode;
         currentNode = nextNode;
-    } 
+        head->next = prevNode;
+        head = prevNode;
+    }
+
+    else {
+            while (currentNode != nullptr) {
+            nextNode = currentNode->next;
+            currentNode->next = prevNode;
+            prevNode = currentNode;
+            currentNode = nextNode;
+        } 
+    }
     return prevNode;
 }
 
 int main() {
-    SinglyLinkedList<int> SLL;
-    SLL.addAtHead(5);
-    SLL.addAtHead(4);
-    SLL.addAtHead(3);
-    SLL.addAtHead(2);
-    SLL.addAtHead(1);
-    SLL.print();
-    SLL.head = reverseLinkedList(SLL.head);
-    SLL.print();
-    DoublyLinkedList<char> DLL;
-    DLL.addAtHead('e');
-    DLL.addAtHead('d');
-    DLL.addAtHead('c');
-    DLL.addAtHead('b');
-    DLL.addAtHead('a');
-    DLL.print();
-    DLL.head = reverseLinkedList(DLL.head);
-    DLL.print();
+    LinkedList<int> LL;
+    LL.addAtHead(5);
+    LL.addAtHead(4);
+    LL.addAtHead(3);
+    LL.addAtHead(2);
+    LL.addAtHead(1);
+    LL.print();
+    LL.head = reverseLinkedList(LL.head, LL.isCircular);
+    LL.print();
+    LinkedList<char> LL2(0, 1);
+    LL2.addAtHead('e');
+    LL2.addAtHead('d');
+    LL2.addAtHead('c');
+    LL2.addAtHead('b');
+    LL2.addAtHead('a');
+    LL2.print();
+    LL2.head = reverseLinkedList(LL2.head, LL2.isCircular);
+    LL2.print();
     return 0;
 }

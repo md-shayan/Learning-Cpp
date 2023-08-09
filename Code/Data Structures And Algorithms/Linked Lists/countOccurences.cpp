@@ -4,55 +4,47 @@
 
 //Time Complexity: O(N)
 //Space Complexity: O(1)
-
 template <typename T>
-int countOccurences(SinglyLinkedList<T> SLL, T key) {
+int countOccurences(LinkedList<T> LL, T key) {
     int occurences = 0;
-    SinglePointingNode<T>* currentNode = SLL.head;
-    while (currentNode) {
-        if (currentNode->data == key) {
-            occurences++;
+    Node<T>* currentNode = LL.head;
+    if (LL.isCircular) {
+        while (currentNode->next != LL.head) {
+            if (currentNode->data == key) {occurences++;}
+            currentNode = currentNode->next;
         }
-        currentNode = currentNode->next;
+        return occurences+1;
     }
-    return occurences;
-}
-
-template <typename T>
-int countOccurences(SinglyCircularLinkedList<T> SCLL, T key) {
-    int occurences = 0;
-    if (SCLL.head) {occurences = 1;}
-    SinglePointingNode<T>* currentNode = SCLL.head->next;
-    while (currentNode != SCLL.head) {
-        if (currentNode->data == key) {
-            occurences++;
+    else {
+            while (currentNode != nullptr) {
+            if (currentNode->data == key) {occurences++;}
+            currentNode = currentNode->next;
         }
-        currentNode = currentNode->next;
+        return occurences;
     }
-    return occurences;
 }
 
 int main() {
-    SinglyLinkedList<int> SLL;
-    SLL.addAtHead(1);
-    SLL.addAtHead(3);
-    SLL.addAtHead(1);
-    SLL.addAtHead(2);
-    SLL.addAtHead(1);
-    SLL.addAtHead(2);
-    SLL.addAtHead(1);
-    SLL.print();
-    std::cout<<countOccurences(SLL, 1)<<std::endl;
+    LinkedList<int> LL;
+    LL.addAtHead(1);
+    LL.addAtHead(3);
+    LL.addAtHead(1);
+    LL.addAtHead(2);
+    LL.addAtHead(1);
+    LL.addAtHead(2);
+    LL.addAtHead(1);
+    LL.print();
+    std::cout<<countOccurences(LL, 1)<<std::endl;
 
-    SinglyCircularLinkedList<int> SCLL;
-    SCLL.addAtHead(1);
-    SCLL.addAtHead(3);
-    SCLL.addAtHead(1);
-    SCLL.addAtHead(2);
-    SCLL.addAtHead(1);
-    SCLL.addAtHead(2);
-    SCLL.addAtHead(1);
-    SCLL.print();
-    std::cout<<countOccurences(SCLL, 1)<<std::endl;
+    LinkedList<int> LL2(0, 1);
+    LL2.addAtHead(1);
+    LL2.addAtHead(3);
+    LL2.addAtHead(1);
+    LL2.addAtHead(2);
+    LL2.addAtHead(1);
+    LL2.addAtHead(2);
+    LL2.addAtHead(1);
+    LL2.print();
+    std::cout<<countOccurences(LL2, 1)<<std::endl;
     return 0;
 }

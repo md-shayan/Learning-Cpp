@@ -7,9 +7,9 @@
 //Space Compleixty: O(1)
 
 template <typename T>
-T getNthNode(SinglyLinkedList<T> SLL, int N) {
+T getNthNode(LinkedList<T> LL, int N) {
     int i=0;
-    SinglePointingNode<T>* currentNode = SLL.head;
+    Node<T>* currentNode = LL.head;
     while (i < N) {
         currentNode = currentNode->next;
         i++;
@@ -17,44 +17,22 @@ T getNthNode(SinglyLinkedList<T> SLL, int N) {
     return currentNode->data;
 }
 
-template <typename T>
-T getNthNode(DoublyLinkedList<T> DLL, int N) {
-    int i=0;
-    DoublePointingNode<T>* currentNode = DLL.head;
-    while (i < N) {
-        currentNode = currentNode->next;
-        i++;
-    }
-    return currentNode->data;
-}
-template <typename T>
-T getNthNode(SinglyCircularLinkedList<T> SCLL, int N) {
-    int i=0;
-    SinglePointingNode<T>* currentNode = SCLL.head;
-    while (i < N) {
-        currentNode = currentNode->next;
-        i++;
-    }
-    return currentNode->data;
-}
-template <typename T>
-T getNthNode(DoublyCircularLinkedList<T> DCLL, int N) {
-    int i=0;
-    DoublePointingNode<T>* currentNode = DCLL.head;
-    while (i < N) {
-        currentNode = currentNode->next;
-        i++;
-    }
-    return currentNode->data;
-}
 
 int main() {
-    SinglyLinkedList<int> SLL;
-    SLL.addAtHead(4);
-    SLL.addAtHead(3);
-    SLL.addAtHead(2);
-    SLL.addAtHead(1);
-    SLL.print();
-    std::cout<<getNthNode<int>(SLL, 2);
+    LinkedList<int> LL;
+    LL.addAtHead(4);
+    LL.addAtHead(3);
+    LL.addAtHead(2);
+    LL.addAtHead(1);
+    LL.print();
+    std::cout<<getNthNode<int>(LL, 2)<<std::endl;
+
+    LinkedList<int> LL2(0, 1);
+    LL2.addAtHead(4);
+    LL2.addAtHead(3);
+    LL2.addAtHead(2);
+    LL2.addAtHead(1);
+    LL2.print();
+    std::cout<<getNthNode<int>(LL2, 2)<<std::endl;
     return 0;
 }

@@ -1,4 +1,4 @@
-//Given a singly linked list, find the middle of the linked list.
+//Given a linked list, find the middle of the linked list.
 //For example, if the given linked list is 1->2->3->4->5 then the output should be 3. 
 #include <iostream>
 #include "LinkedList.h"
@@ -7,33 +7,30 @@
 //Space Compleixty: O(1)
 
 template <typename T>
-T getMiddleData(SinglyLinkedList<T> SLL) {
+T getMiddleData(LinkedList<T> LL) {
     int size = 0;
-    SinglePointingNode<T>* currentNode = SLL.head;
-    while (currentNode != nullptr) {
+    Node<T>* currentNode = LL.head;
+    if (LL.isCircular) {
         size++;
-        currentNode = currentNode->next;
-    }
-    int half = size/2;
-    currentNode = SLL.head;
-    int i=0;
-    while (i<half) {
-        currentNode = currentNode->next;
-        i++;
-    }
-    return currentNode->data;
-}
 
-template <typename T>
-T getMiddleData(SinglyCircularLinkedList<T> SCLL) {
-    int size = 1;
-    SinglePointingNode<T>* currentNode = SCLL.head->next;
-    while (currentNode != SCLL.head) {
-        size++;
-        currentNode = currentNode->next;
+        //Counting the number of Nodes in Linked List
+        while (currentNode->next != LL.head) {
+            size++;
+            currentNode = currentNode->next;
+        }
     }
+
+    else {
+
+        //Counting the number of Nodes in Linked List
+        while (currentNode != nullptr) {
+            size++;
+            currentNode = currentNode->next;
+        }
+    }
+
     int half = size/2;
-    currentNode = SCLL.head;
+    currentNode = LL.head;
     int i=0;
     while (i<half) {
         currentNode = currentNode->next;
@@ -43,24 +40,24 @@ T getMiddleData(SinglyCircularLinkedList<T> SCLL) {
 }
 
 int main() {
-    SinglyLinkedList<int> SLL;
-    SLL.addAtHead(6);
-    SLL.addAtHead(5);   
-    SLL.addAtHead(4);
-    SLL.addAtHead(3);
-    SLL.addAtHead(2);
-    SLL.addAtHead(1);
-    SLL.print();
-    std::cout<<getMiddleData(SLL)<<std::endl;
+    LinkedList<int> LL;
+    LL.addAtHead(6);
+    LL.addAtHead(5);   
+    LL.addAtHead(4);
+    LL.addAtHead(3);
+    LL.addAtHead(2);
+    LL.addAtHead(1);
+    LL.print();
+    std::cout<<getMiddleData(LL)<<std::endl;
 
-    SinglyCircularLinkedList<int> SCLL;
-    SCLL.addAtHead(6);
-    SCLL.addAtHead(5);   
-    SCLL.addAtHead(4);
-    SCLL.addAtHead(3);
-    SCLL.addAtHead(2);
-    SCLL.addAtHead(1);
-    SCLL.print();
-    std::cout<<getMiddleData(SCLL)<<std::endl;
+    LinkedList<int> LL2(0, 1);
+    LL2.addAtHead(6);
+    LL2.addAtHead(5);   
+    LL2.addAtHead(4);
+    LL2.addAtHead(3);
+    LL2.addAtHead(2);
+    LL2.addAtHead(1);
+    LL2.print();
+    std::cout<<getMiddleData(LL2)<<std::endl;
     return 0;
 }
