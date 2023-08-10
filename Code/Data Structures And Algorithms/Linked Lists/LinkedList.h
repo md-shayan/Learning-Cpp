@@ -18,13 +18,13 @@ class LinkedList {
     public:
     Node<T>* head;
 
-    // Unlike isCircular, changing this would impact how the 'print()' method prints this linked list
-    // Instead of ' -> ', isDoubly would make it ' <-> ' to show a two way connection between Nodes
-    bool isDoubly;
-
     // Changing this would not make a circular list into non-circular, or vice versa
     // Hence it is declared const for safety and will only be used by the class methods
     const bool isCircular;
+
+    // Unlike isCircular, changing this would impact how the 'print()' method prints this linked list
+    // Instead of ' -> ', isDoubly would make it ' <-> ' to show a two way connection between Nodes
+    bool isDoubly;
 
     LinkedList(bool setDoubly=false, bool setCircular=false) : isCircular{setCircular} {
         head = nullptr;
