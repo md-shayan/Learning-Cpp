@@ -356,7 +356,7 @@ class LinkedList {
         return NodeToGet;
     }
 
-    //return true of NodeToSearch exists in the Linked List
+    //return true if NodeToSearch exists in the Linked List
     bool exists(Node<T>* NodeToSearch) {
         if (head == nullptr) {
             std::cout<<"Linked List is Empty"<<std::endl;
