@@ -298,7 +298,7 @@ class LinkedList {
         delete NodeToDelete;
     }
 
-    // Deletes the first Node containing 'data'
+    // Deletes the given Node
     void deleteNode(Node<T>* NodeToDelete) {
         if (isEmpty()) {
             std::cout<<"Linked List is empty"<<std::endl;
