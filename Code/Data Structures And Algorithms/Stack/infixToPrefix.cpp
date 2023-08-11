@@ -10,7 +10,11 @@ int precedence(char c) {
     return 0;
 }
 
-
+// Reverse the given expression and swap '(' & ')'
+// Iterate over the expression, and convert it to postfix
+// Again reverse the new expression and swapping '(' & ')'
+// Time Complexity: O(N)
+// Space Complexity: O(N)
 std::string infixToPrefix(std::string expression) {
     std::stack<char> st;
     reverse(expression.begin(), expression.end());
