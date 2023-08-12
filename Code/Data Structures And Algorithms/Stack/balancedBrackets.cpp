@@ -1,5 +1,3 @@
-
-
 // Given an expression string exp, write a program to examine whether the pairs and the orders of '{', '}', '(', ')', '[', ']' are correct in the given expression.
 
 #include <iostream>
@@ -9,7 +7,7 @@
 // Iterate over the given expression,
 // If the current element is an opening bracket, then push it to the stack
 // Else, check if the top of the stack is the opening bracket for the current element
-// If it is then pop off the stack, otherwise return false
+// If it is, then pop off the stack, otherwise return false
 // After the iteration is over, return true
 // Time Complexity: O(N)
 // Space Complexity: O(N)
