@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <stack>
-#include <string>
+#include "Stack.h"
 
 // Iterate over the given expression,
 // If the current element is an opening bracket, then push it to the stack
@@ -12,7 +12,7 @@
 // Time Complexity: O(N)
 // Space Complexity: O(N)
 bool checkBalancedBrackets(std::string expression) {
-	std::stack<char> openingBrackets;
+	Stack<char> openingBrackets;
 	for (int i=0; i<expression.length(); i++) {
 		if ((expression[i] == '(') || (expression[i] == '[') || (expression[i] == '{')) {
 			openingBrackets.push(expression[i]);
