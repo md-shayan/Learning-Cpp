@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <stack>
+#include "Stack.h"
 
 // Iterate over the given expression,
 // If the current element is NOT an operator, then push it to the stack
@@ -9,7 +9,7 @@
 // Time Complexity: O(N)
 // Space Complexity: O(N)
 std::string postfixToPrefix(std::string expression) {
-	std::stack<std::string> st;
+	Stack<std::string> st;
 	char c;
 	std::string newString;
 	for (int i=0; i<expression.length(); i++) {
