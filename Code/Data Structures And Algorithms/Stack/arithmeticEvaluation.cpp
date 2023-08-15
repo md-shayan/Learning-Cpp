@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <stack>
+#include "Stack.h"
 
 int precedence(char c) {
         if (c == '^') {return 3;}
@@ -10,7 +10,7 @@ int precedence(char c) {
 }
 
 std::string infixToPostfix(std::string expression) {
-	std::stack<char> operands;
+	Stack<char> operands;
         std::string result = "";
         for (int i=0; i<expression.length(); i++) {
                 if ((expression[i] >= 'a' && expression[i] <= 'z') || (expression[i] >= 'A' && expression[i] <= 'Z') || (expression[i] >= '0' && expression[i] <= '9')) {
@@ -64,7 +64,7 @@ int toInt(char c) {
 // Time Complexity: O(N)
 // Space Complexity: O(N)
 int evaluation(std::string expr) {
-	std::stack<int> st;
+	Stack<int> st;
 	int current;
 	for (int i=0; i<expr.length(); i++) {
 		if (expr[i] >= '0' && expr[i] <= '9') {
