@@ -1,7 +1,7 @@
 // Given a string, reverse it using stack. 
 #include <iostream>
 #include <string>
-#include <stack>
+#include "Stack.h"
 
 // Iterate over the given string,
 // push the letters on to a stack
@@ -10,7 +10,7 @@
 // Time Complexity: O(N)
 // Space Complexity: O(N)
 void reverseString(std::string& str) {
-	std::stack<char> letters;
+	Stack<char> letters;
 	for (int i=0; i<str.length(); i++ ) {
 		letters.push(str[i]);
 	}
