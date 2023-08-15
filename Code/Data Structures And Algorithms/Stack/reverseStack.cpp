@@ -1,9 +1,9 @@
 //Write a program to reverse a stack using recursion, without using any loop.
 
 #include <iostream>
-#include <stack>
+#include "Stack.h"
 
-void insertAtBottom(std::stack<int>& st, int elem) {
+void insertAtBottom(Stack<int>& st, int elem) {
 	if (st.empty()) {
 		st.push(elem);
 		return;
@@ -17,7 +17,7 @@ void insertAtBottom(std::stack<int>& st, int elem) {
 // Store the top element and pop out the stack recursively and insert the top element at the bottom of the stack recursively
 // Time Complexity: O(N^2)
 // Space Complexity: O(N)
-void reverse(std::stack<int>& st) {
+void reverse(Stack<int>& st) {
 	if (st.empty()) {return;}
 	int topElem = st.top();
 	st.pop();
@@ -25,7 +25,7 @@ void reverse(std::stack<int>& st) {
 	insertAtBottom(st, topElem);
 }
 
-void printStack(std::stack<int> st) {
+void printStack(Stack<int> st) {
 	while (!st.empty()) {
 		std::cout << st.top() << " -> ";
 		st.pop();
@@ -34,14 +34,14 @@ void printStack(std::stack<int> st) {
 }
 
 int main() {
-	std::stack<int> st;
+	Stack<int> st;
 	st.push(1);
 	st.push(2);
 	st.push(3);
 	st.push(4);
 	st.push(5);
-	printStack(st);
+	st.print();
 	reverse(st);
-	printStack(st);
+	st.print();
 	return 0;
 }
