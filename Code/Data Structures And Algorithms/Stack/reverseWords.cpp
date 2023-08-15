@@ -1,7 +1,7 @@
 // Given string str, we need to print the reverse of individual words.
 #include <iostream>
 #include <string>
-#include <stack>
+#include "Stack.h"
 
 // Iterate over the given string from the end
 // Whenever a non-space character is encountered, store it into a word variable
@@ -11,7 +11,7 @@
 // Time Compelxity: O(N)
 // Space Complexity: O(N)
 void reverseWords(std::string& sentence) {
-	std::stack<std::string> words;
+	Stack<std::string> words;
 	std::string word = "";
 	for (int i=sentence.length()-1; i>=0; i--) {
 		if (sentence[i] == ' ') {
@@ -36,7 +36,7 @@ int main() {
 	reverseWords(sentence);
 	std::cout << sentence << std::endl;
 
-	std::string sentence2 = "Geeks for Geeks";
+	std::string sentence2 = "Foo Bar";
 	std::cout << sentence2 << std::endl;
 	reverseWords(sentence2);
 	std::cout << sentence2 << std::endl;
