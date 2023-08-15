@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <stack>
+#include "Stack.h"
 
 // Iterate over the expression from the end
 // if the current element is NOT an operator, push it to the stack
@@ -9,7 +9,7 @@
 // Time Complexity: O(N)
 // Space Complexity: O(N)
 std::string prefixToInfix(std::string expression) {
-	std::stack<std::string> result;
+	Stack<std::string> result;
 	char c;
 	std::string newString;
 	for (int i=expression.length()-1; i>=0; i--) {
