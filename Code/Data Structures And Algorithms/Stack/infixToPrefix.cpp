@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
-#include <stack>
+#include "Stack.h"
 
 int precedence(char c) {
     if (c == '^') {return 3;}
@@ -16,7 +16,7 @@ int precedence(char c) {
 // Time Complexity: O(N)
 // Space Complexity: O(N)
 std::string infixToPrefix(std::string expression) {
-    std::stack<char> st;
+    Stack<char> st;
     reverse(expression.begin(), expression.end());
     for (int i=0; i<expression.length(); i++) {
         if (expression[i] == ')') {
