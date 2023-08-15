@@ -19,7 +19,7 @@ int precedence(char c) {
 // Time Complexity: O(N)
 // Space Complexity: O(N)
 std::string infixToPostfix(std::string expression) {
-	DynamicStack<char> operands;
+	Stack<char> operands;
 	std::string result = "";
 	for (int i=0; i<expression.length(); i++) {
 		if ((expression[i] >= 'a' && expression[i] <= 'z') || (expression[i] >= 'A' && expression[i] <= 'Z')) {
@@ -29,23 +29,23 @@ std::string infixToPostfix(std::string expression) {
 			operands.push(expression[i]);
 		}
 		else if (expression[i] == ')') {
-			while (!operands.isEmpty() && operands.top() != '(') {
+			while (!operands.empty() && operands.top() != '(') {
 				result += operands.top();
 				operands.pop();
 			}
-			if (!operands.isEmpty()) {
+			if (!operands.empty()) {
 				operands.pop();
 			}
 		}
 		else {
-			while (!operands.isEmpty() && precedence(operands.top()) >= precedence(expression[i])) {
+			while (!operands.empty() && precedence(operands.top()) >= precedence(expression[i])) {
 				result += operands.top();
 				operands.pop();
 			}
 			operands.push(expression[i]);
 		}
 	}
-	while (!operands.isEmpty()) {
+	while (!operands.empty()) {
 		result += operands.top();
 		operands.pop();
 	}
