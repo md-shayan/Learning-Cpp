@@ -10,9 +10,8 @@
 // std::copy_n(from_arr, elems, to_arr)
 // Copies 'elems' number of elements from from_arr into to_arr.
 
-
 // std::iota(start_address, end_address, start_value)
-// Fills the given address range with consecutive values starting from the given start_value.
+// Fills the given address range with consecutive values starting from the given 'start_value'.
 
 #include <iostream>
 #include <algorithm>
