@@ -1,7 +1,6 @@
 // std::partition(start_address, end_address, [](T x) {return <condition>;})
 // Shifts all the elements that satisfies the given conditon in address range to the left of the range
 
-
 // std::stable_partition(start_address, end_address, [](T x) {return <conditon>;})
 // Shifits all the elements that satisfies the given condition in address range to the left of the address // range while also maintaining the order of the appearance of the elements
 
