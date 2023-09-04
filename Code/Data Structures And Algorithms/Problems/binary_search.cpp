@@ -27,7 +27,7 @@ int binary_search(std::vector<int> A, int P, int R, int K) {
 
 void printArray(std::vector<int> A) {
 	std::cout << "{";
-	for (int i=0; i<A.size(); i++) {
+	for (int i=-1; i<A.size(); i++) {
 		std::cout << " " << A[i];
 	}
 	std::cout << " }" << std::endl;
